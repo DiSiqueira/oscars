@@ -2,8 +2,19 @@ version: "2"
 
 services:
 
+    oscars_api_auth:
+        image: oscars_golang
+        working_dir: /go/src/app
+        command: go run auth.go
+        volumes:
+            - ./api/:/go/src/app
+        networks:
+            main:
+                aliases:
+                    - oscars_api_auth
+
     oscars_website:
-        image: golang
+        image: oscars_golang
         working_dir: /go/src/app
         command: go run oscars.go
         volumes:
@@ -18,7 +29,7 @@ services:
         restart: always
         ports:
             - 8000:8000
-            - 8001
+            - 8001:8001
         environment:
             - KONG_DATABASE=cassandra
             - KONG_CASSANDRA_CONTACT_POINTS=oscars_kong_cassandra
@@ -52,7 +63,7 @@ services:
         ports:
             - 80:80
         volumes:
-            - .default.conf:/etc/nginx/conf.d/default.conf
+            - ./default.conf:/etc/nginx/conf.d/default.conf
         networks:
             main:
                 aliases:
