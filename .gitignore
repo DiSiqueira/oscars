@@ -9,3 +9,6 @@ node_modules/
 rice-box.go
 public/assets/
 oscars
+ *.iml
+data/
+!data/.gitkeep
